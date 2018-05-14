@@ -12,10 +12,8 @@ def dopython(msg):
     collect result with redirect sys.stdout
     """
     if msg.text.startswith("code:\n"): 
-        resp = executionpython(msg.text[5:])
-        print(resp.center(30, "-"))
-        bot.send_message(msg.chat.id, resp.center(30, "-"))
-    else: bot.send_message(msg.chat.id, msg.text.upper())
+        bot.reply_to(msg, "result: " + executionpython(msg.text[5:]))
+    else: bot.reply_to(msg, msg.text.upper())
     
 def executionpython(code):
     """Execution code eval() and collect result 
@@ -35,6 +33,6 @@ def executionpython(code):
 
 if __name__ == "__main__":
     bot.polling(none_stop=True)
-    #print(executionpython("1+2"))
+    #print(executionpython("print('s')"))
 
 
