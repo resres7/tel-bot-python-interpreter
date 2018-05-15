@@ -1,0 +1,65 @@
+<html><head><title>Online Python Interpreter</title>
+<script src="dist/skulpt-kw.js" type="text/javascript"></script>
+<script type="text/javascript">
+    function outf(text)
+    {
+        var output = document.getElementById("output");
+        text = text.replace(/</g, '&lt;');
+        output.innerHTML = output.innerHTML + text;
+    }
+
+    function runit()
+    {
+        var prog = document.getElementById("code").value;
+        var output = document.getElementById("output");
+        output.innerHTML = '';
+        Sk.configure({output:outf});
+        try {
+            Sk.importMainWithBody("<stdin>", false, prog);
+        } catch (e) {
+            alert(e);
+        }
+    }
+</script>
+</head>
+
+<body>
+<h2>A Python Interpreter</h2>
+<p>This is a simple online <a href="http://www.python.org">Python</a> interpreter, built using the <a
+  href="http://www.skulpt.org/">Skulpt</a> engine (slightly modified by <a
+  href="http://mathcs.holycross.edu/~kwalsh/">kwalsh</a>).</p>
+<p>
+Put your Python code below (copy-and-paste or just type it in directly), then click run.</p>
+<p><b>Note: this isn't a complete
+version of Python. See below.</b></p>
+<form>
+<textarea id="code" rows="24" cols="80">
+print "Hello World"
+
+n = input("Pick a number, any number: ")
+print "Did you know that " + str(n) + " squared is " + str(n*n) + "?"
+
+print "Goodbye"
+</textarea><br>
+<button onclick="runit()" type="button">Run</button>
+
+<br>
+Output:<br>
+<textarea id="output" rows="24" cols="80" disabled>
+</textarea>
+
+<p>Some caveats:</p>
+<ul>
+  <li>The raw_input("...") and input("...") functions work a little differently here than in actual Python. They bring up a dialog box as a separate
+  window, rather than having you type responses in the same window as the output. And, you must pass a string argument to
+  each function. </li>
+  <li>The input("...") function only accepts integers and floating point numbers. Normally, the Python input("...") function would
+  accept any expression as input, such as quoted strings, variables, arithmetic operators, etc.
+  <li>This is a very incomplete implementation of Python. There are likely bugs, and many Python features are
+  missing. But it should work for basic arithemtic and strings, and should be sufficient for at least some simple
+  programs.</li>
+</ul>
+</form>
+
+</body>
+</html>
