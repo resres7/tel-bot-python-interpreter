@@ -53,9 +53,13 @@ class telbotinterp:
     def sequrity(self, code):
         """Check if user import sys
         """
-        #print(code.find("sys"))
-        if not code.find("sys") == -1:
-            return True
+        def security_exp(msg):
+            bad_words = ('os', 'open', 'import', '__import__',
+                        '__builtins__','__class__','__subclasses__')
+            for exc in bad_words:
+                if msg.find(exc) != -1:
+                    return False
+
 
     def runprocess(self, code, msg):
         proc = Process(target=self.executionpython, args=(code, msg))
