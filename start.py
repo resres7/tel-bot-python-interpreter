@@ -3,8 +3,14 @@ from multiprocessing import Process
 import telebot
 from execcode import Execcode
 
-ADMINS = [398614726]
-bot = telebot.TeleBot("423768346:AAGzF8dyVMle1oBqxbhPN_BHa3xnHFH90go")
+CONFIG = {}
+with open("config.txt") as file:
+    for line in file:
+        print(line)
+        name, value = line.split("==")
+        CONFIG[name] = value.rstrip()
+ADMINS = CONFIG.get("ADMINS")
+bot = telebot.TeleBot(CONFIG.get("TOKEN"))
 
 class telbotinterp:
     def __init__(self, admins=ADMINS, bot=bot):

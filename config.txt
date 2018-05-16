@@ -1,0 +1,2 @@
+ADMINS==None 
+TOKEN==token
