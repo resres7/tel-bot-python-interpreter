@@ -1,4 +1,4 @@
-import sys, time
+import os, sys, time, threading
 from multiprocessing import Process
 import telebot
 from execcode import Execcode
@@ -16,6 +16,7 @@ class telbotinterp:
         self.admins = admins
         self.bot = bot
         self.procs = {}
+        self.threadchecker = threading.Thread(target=self.checkprocs)
 
         @bot.message_handler(content_types=["text"])
         def dopython(msg):
@@ -25,23 +26,9 @@ class telbotinterp:
             """
             if msg.text.startswith("code:\n"):
                 if self.sequrity(msg.text): bot.reply_to(msg, "You cant use danger modules")
-                else: self.executionpythonjs(msg.text[5:], msg)
+                else: self.runprocess(msg.text[5:], msg)
             else: bot.reply_to(msg, msg.text.upper()) # until testing
         
-    def executionpython(self, code, msg):
-        """Execution code eval() and collect result 
-            input: 
-                code: str() type
-                msg: telebot.TeleBot object
-            output:
-                result/error: str() type
-        """
-        try:
-            reply = str(eval(compile(code, '<string>', 'eval')))
-        except Exception as e:
-            print(f"in your vode was error:\n{e}") 
-        bot.reply_to(msg, "result: " + reply)
-
     def executionpythonjs(self, code, msg):
         """Execution code with JS lib 'skulpt-kw.js' and collect result 
             input: 
@@ -51,8 +38,6 @@ class telbotinterp:
                 result/error: str() type
         """
         reply = Execcode(code).execjs()
-        #print("in start.executionpythonjs() --> reply" + reply)
-        #print("-"*40)
         bot.reply_to(msg, "result: " + reply) 
 
     def sequrity(self, code):
@@ -61,33 +46,39 @@ class telbotinterp:
         bad_words = ['os', 'open', 'import', '__import__',
                     '__builtins__','__class__','__subclasses__']
         for exc in bad_words:
-            print(exc)
             if code.find(exc) != -1:
                 return True
 
-
     def runprocess(self, code, msg):
-        proc = Process(target=self.executionpython, args=(code, msg))
-        self.procs[proc.name] = [proc, time.time()]
+        proc = Process(target=self.executionpythonjs, args=(code, msg))
         proc.start()
+        self.procs[proc.pid] = time.time()
+        print("{}{}",self.threadchecker.is_alive(),"{}{}")
+        if not self.threadchecker.is_alive():
+            self.threadchecker = threading.Thread(target=self.checkprocs)
+            self.threadchecker.start()
+
+    def checkprocs(self):
+        while True:
+            print("~" * 40 + "\n" + str(self.procs) + "\n" + "~"*40)
+            time.sleep(0.2)
+            #if not self.procs: break
+            for proc, starttime in self.procs.items():
+                print("|",proc, time.time() - starttime, "|")
+                if time.time() - starttime >= 1:
+                    try:
+                        os.kill(proc,0)
+                    except Exception as e:
+                        print(e)
+                    finally:
+                        del self.procs[proc]
 
     def start(self):
         self.bot.polling(none_stop=True)
-
-    def checkprocs(self):
-        while 1:
-            time.sleep(0.1)
-            for proc, val in self.procs.items():
-                if time.time() - val[1] >= 60:
-                    pass#kill proc
         
 
-
 if __name__ == "__main__":
-    #st = str(exec("1+2"))
-    #print(st, "<---")
     tbi = telbotinterp(admins=ADMINS, bot=bot)
     tbi.start()
-    #print(executionpython("print('s')"))
 
 
