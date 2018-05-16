@@ -6,7 +6,6 @@ from execcode import Execcode
 CONFIG = {}
 with open("config.txt") as file:
     for line in file:
-        print(line)
         name, value = line.split("==")
         CONFIG[name] = value.rstrip()
 ADMINS = CONFIG.get("ADMINS")
@@ -25,7 +24,7 @@ class telbotinterp:
             collect result with redirect sys.stdout
             """
             if msg.text.startswith("code:\n"):
-                if self.sequrity(msg.text): bot.reply_to(msg, "You cant use sys module")
+                if self.sequrity(msg.text): bot.reply_to(msg, "You cant use danger modules")
                 else: self.executionpythonjs(msg.text[5:], msg)
             else: bot.reply_to(msg, msg.text.upper()) # until testing
         
@@ -59,12 +58,12 @@ class telbotinterp:
     def sequrity(self, code):
         """Check if user import sys
         """
-        def security_exp(msg):
-            bad_words = ('os', 'open', 'import', '__import__',
-                        '__builtins__','__class__','__subclasses__')
-            for exc in bad_words:
-                if msg.find(exc) != -1:
-                    return False
+        bad_words = ['os', 'open', 'import', '__import__',
+                    '__builtins__','__class__','__subclasses__']
+        for exc in bad_words:
+            print(exc)
+            if code.find(exc) != -1:
+                return True
 
 
     def runprocess(self, code, msg):
