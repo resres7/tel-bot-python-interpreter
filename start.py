@@ -1,6 +1,7 @@
-import sys
+import sys, time
 from multiprocessing import Process
-import telebot, time
+import telebot
+from execcode import Execcode
 
 ADMINS = [398614726]
 bot = telebot.TeleBot("423768346:AAGzF8dyVMle1oBqxbhPN_BHa3xnHFH90go")
@@ -19,7 +20,7 @@ class telbotinterp:
             """
             if msg.text.startswith("code:\n"):
                 if self.sequrity(msg.text): bot.reply_to(msg, "You cant use sys module")
-                else: self.runprocess(msg.text[5:], msg)
+                else: self.executionpythonjs(msg.text[5:], msg)
             else: bot.reply_to(msg, msg.text.upper()) # until testing
         
     def executionpython(self, code, msg):
@@ -36,10 +37,23 @@ class telbotinterp:
             print(f"in your vode was error:\n{e}") 
         bot.reply_to(msg, "result: " + reply)
 
+    def executionpythonjs(self, code, msg):
+        """Execution code with JS lib 'skulpt-kw.js' and collect result 
+            input: 
+                code: str() type
+                msg: telebot.TeleBot object
+            output:
+                result/error: str() type
+        """
+        reply = Execcode(code).execjs()
+        #print("in start.executionpythonjs() --> reply" + reply)
+        #print("-"*40)
+        bot.reply_to(msg, "result: " + reply) 
+
     def sequrity(self, code):
         """Check if user import sys
         """
-        print(code.find("sys"))
+        #print(code.find("sys"))
         if not code.find("sys") == -1:
             return True
 
