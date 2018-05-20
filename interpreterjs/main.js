@@ -9484,16 +9484,14 @@
   goog.exportSymbol("Sk.builtins", Sk.builtins);
 }());
 
-/*process.argv.forEach(function (val, index, array) {
-    console.log(index + ': ' + val);
-  });
-*/
+
 
 result = ""
 function out(text){
   result = result + text
 }
 
+code = "print(1)"
 function runit(code){
   Sk.pre = "output";
   Sk.configure({output:out, read:code});
@@ -9509,7 +9507,3 @@ code = process.argv[2]
 runit(code)
 
 console.log(result)
-
-
-
-

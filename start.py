@@ -11,12 +11,13 @@ with open("config.txt") as file:
 ADMINS = CONFIG.get("ADMINS")
 bot = telebot.TeleBot(CONFIG.get("TOKEN"))
 
-class telbotinterp:
-    def __init__(self, admins=ADMINS, bot=bot):
+class Telbotinterp:
+    def __init__(self, admins=ADMINS, bot=bot, test=False):
         self.admins = admins
         self.bot = bot
         self.procs = {}
-        self.threadchecker = threading.Thread(target=self.checkprocs)
+        if not test:
+            self.threadchecker = threading.Thread(target=self.checkprocs)
 
         @bot.message_handler(content_types=["text"])
         def dopython(msg):
@@ -58,27 +59,28 @@ class telbotinterp:
             self.threadchecker = threading.Thread(target=self.checkprocs)
             self.threadchecker.start()
 
-    def checkprocs(self):
+    def checkprocs(self, delay=0.5):
         while True:
-            print("~" * 40 + "\n" + str(self.procs) + "\n" + "~"*40)
-            time.sleep(0.2)
-            #if not self.procs: break
+            print("checkprocs".center(30, "~")  + "\n" + str(self.procs))
+            time.sleep(delay)
+            chkdict = []
             for proc, starttime in self.procs.items():
-                print("|",proc, time.time() - starttime, "|")
                 if time.time() - starttime >= 1:
-                    try:
-                        os.kill(proc,0)
-                    except Exception as e:
-                        print(e)
-                    finally:
-                        del self.procs[proc]
+                    print(f"{proc} added to del list, time was expired== {time.time() - starttime}")
+                    chkdict.append(proc)
+            for proc in chkdict:
+                try:
+                    os.kill(proc, 0)
+                except Exception as e:
+                    print(e)
+                del self.procs[proc]
 
     def start(self):
         self.bot.polling(none_stop=True)
         
 
 if __name__ == "__main__":
-    tbi = telbotinterp(admins=ADMINS, bot=bot)
+    tbi = Telbotinterp(admins=ADMINS, bot=bot)
     tbi.start()
 
 

@@ -1,5 +1,4 @@
 import sys
-from io import StringIO
 from Naked.toolshed.shell import execute_js, run_js
 
 class Execcode:
@@ -16,7 +15,8 @@ class Execcode:
         self.pathsrc = pathsrc
 
     def execjs(self):
-        result =run_js(self.pathsrc, arguments=self.code, suppress_stdout=True)
+        result = run_js(self.pathsrc, arguments=self.code, suppress_stdout=True)
+        #result.
         #print("in Execcode.execjs() --> result" + result.decode("utf-8"))
         #print("-"*40)
         return result.decode("utf-8")
