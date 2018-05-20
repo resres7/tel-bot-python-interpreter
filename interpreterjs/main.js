@@ -9491,7 +9491,6 @@ function out(text){
   result = result + text
 }
 
-code = "print(1)"
 function runit(code){
   Sk.pre = "output";
   Sk.configure({output:out, read:code});
