@@ -16,7 +16,7 @@ class Execcode:
 
     def execjs(self):
         js_command = 'node ' + self.pathsrc + " " + self.code
-        result = run(js_command, suppress_stdout=True, suppress_stderr=True)
+        result = run(js_command, suppress_stdout=True, suppress_stderr=True, suppress_exit_status_call=False)
         #result.
         print(result)
         print("in Execcode.execjs() --> result" + result.decode("utf-8"))
