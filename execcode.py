@@ -17,8 +17,9 @@ class Execcode:
     def execjs(self):
         result = run_js(self.pathsrc, arguments=self.code, suppress_stdout=True)
         #result.
-        #print("in Execcode.execjs() --> result" + result.decode("utf-8"))
-        #print("-"*40)
+        print(result)
+        print("in Execcode.execjs() --> result" + result.decode("utf-8"))
+        print("-"*40)
         return result.decode("utf-8")
 
 

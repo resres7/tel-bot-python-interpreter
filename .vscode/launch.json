@@ -13,7 +13,7 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Запустить программу",
+            "name": "NodeJS",
             "program": "${workspaceFolder}/interpreterjs/main.js"
         }
     ]
