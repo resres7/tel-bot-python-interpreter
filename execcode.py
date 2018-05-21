@@ -1,5 +1,5 @@
 import sys
-from Naked.toolshed.shell import execute_js, run_js
+from Naked.toolshed.shell import run
 
 class Execcode:
     """Execut python code with LS 'skulpt-kw.js' lib 
@@ -15,7 +15,8 @@ class Execcode:
         self.pathsrc = pathsrc
 
     def execjs(self):
-        result = run_js(self.pathsrc, arguments=self.code, suppress_stdout=True, suppress_stderr=True)
+        js_command = 'node ' + self.pathsrc + " " + self.code
+        result = run(js_command, suppress_stdout=True, suppress_stderr=True)
         #result.
         print(result)
         print("in Execcode.execjs() --> result" + result.decode("utf-8"))
